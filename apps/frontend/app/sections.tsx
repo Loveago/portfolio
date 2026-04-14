@@ -1,7 +1,7 @@
 "use client";
 
-import { MouseEvent, useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform, useSpring } from "framer-motion";
+import { MouseEvent, useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   ArrowUpRight,
   Brush,
@@ -17,10 +17,9 @@ import {
   Rocket,
   Sparkles,
   Sun,
-  X,
-  ChevronDown
+  X
 } from "lucide-react";
-import { GlassCard, NeonButton, SectionHeading } from "@portfolio/ui";
+import { GlassCard, NeonButton } from "@portfolio/ui";
 import { useTheme } from "./providers";
 
 type Testimonial = {
@@ -165,59 +164,23 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
   );
 }
 
-// Text Reveal Animation Component
+// Simple fade-in text - lightweight for performance
 function TextReveal({ children, className = "" }: { children: string; className?: string }) {
   const reduceMotion = useReducedMotion();
-  const words = children.split(" ");
-
-  const container = {
-    hidden: { opacity: 0 },
-    visible: (i = 1) => ({
-      opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.04 }
-    })
-  };
-
-  const child = {
-    hidden: {
-      opacity: 0,
-      y: 20,
-      rotateX: -90
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100
-      }
-    }
-  };
-
+  
   if (reduceMotion) {
     return <span className={className}>{children}</span>;
   }
 
   return (
     <motion.span
-      className={`${className} inline-flex flex-wrap`}
-      variants={container}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
+      className={className}
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
     >
-      {words.map((word, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          className="mr-[0.25em] inline-block"
-          style={{ transformOrigin: "center bottom" }}
-        >
-          {word}
-        </motion.span>
-      ))}
+      {children}
     </motion.span>
   );
 }
@@ -572,476 +535,340 @@ export function HomePage() {
         </nav>
       </motion.header>
 
-      <motion.section 
-        id="home" 
-        ref={heroRef} 
-        className="section-shell mx-auto max-w-6xl px-5 pt-24 pb-16 md:pt-32 md:pb-24 min-h-screen flex items-center"
-        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
-      >
-        <div className="grid items-center gap-8 md:gap-12 md:grid-cols-2 w-full">
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            animate="visible"
-            className="space-y-5 md:space-y-6 text-center md:text-left"
-          >
-            <motion.p 
-              variants={fadeUp}
-              className="inline-flex rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent-cyan"
+      {/* MOBILE-FIRST HERO */}
+      <section id="home" className="pt-20 pb-12 md:py-24">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          
+          {/* Mobile Hero - Clean & Simple */}
+          <div className="md:hidden">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="text-center"
             >
-              Welcome to DevCraft Studio
-            </motion.p>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-text-primary">
-              <TextReveal>We Build. We Market.</TextReveal>{" "}
-              <span className="text-accent-cyan">
-                <TextReveal>We Deliver.</TextReveal>
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-4">
+                Welcome
               </span>
-            </h1>
-            <motion.p 
-              variants={fadeUp}
-              className="max-w-xl mx-auto md:mx-0 text-base md:text-lg text-text-secondary"
-            >
-              A creative digital studio helping businesses grow with conversion-focused websites,
-              strategic campaigns, and unforgettable visual storytelling.
-            </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-              <motion.a 
-                href="#portfolio"
-                whileHover={reduceMotion ? undefined : { scale: 1.05 }}
-                whileTap={reduceMotion ? undefined : { scale: 0.95 }}
-              >
-                <NeonButton className="group inline-flex items-center gap-2">
-                  View Our Work
-                  <motion.span
-                    animate={{ x: [0, 4, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </motion.span>
-                </NeonButton>
-              </motion.a>
-              <a href="#services">
-                <NeonButton variant="ghost">Our Services</NeonButton>
-              </a>
+              <h1 className="text-3xl font-bold text-text-primary leading-tight mb-4">
+                We Build.<br/>
+                We Market.<br/>
+                <span className="text-[var(--accent-cyan)]">We Deliver.</span>
+              </h1>
+              <p className="text-text-secondary text-base mb-6 max-w-xs mx-auto">
+                Creative digital studio helping businesses grow.
+              </p>
+              <div className="flex flex-col gap-3 mb-8">
+                <a href="#portfolio">
+                  <NeonButton className="w-full">View Our Work</NeonButton>
+                </a>
+                <a href="#services">
+                  <NeonButton variant="ghost" className="w-full">Our Services</NeonButton>
+                </a>
+              </div>
             </motion.div>
-            <motion.div 
-              variants={staggerContainer}
-              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4"
-            >
+
+            {/* Mobile Stats - Horizontal Scroll */}
+            <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
               {[
-                ["50+", "Projects Completed"],
-                ["30+", "Happy Clients"],
-                ["3", "Core Services"],
-                ["100%", "Commitment"]
+                ["50+", "Projects"],
+                ["30+", "Clients"],
+                ["3", "Services"],
+                ["100%", "Commit"]
               ].map(([value, label]) => (
-                <AnimatedCounter key={label} value={value} label={label} />
+                <div key={label} className="flex-shrink-0 bg-bg-card border border-border rounded-xl p-3 min-w-[80px] text-center">
+                  <p className="text-xl font-bold text-[var(--accent-cyan)]">{value}</p>
+                  <p className="text-xs text-text-muted">{label}</p>
+                </div>
               ))}
-            </motion.div>
-            
-            {/* Mobile Hero Card */}
-            <motion.div 
-              variants={fadeUp}
-              className="block md:hidden mt-6"
-            >
-              <GlassCard className="p-4 bg-gradient-to-br from-[var(--accent-cyan)]/10 to-[var(--accent-pink)]/10 border-[var(--accent-cyan)]/30">
+            </div>
+          </div>
+
+          {/* Desktop Hero */}
+          <div className="hidden md:grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20">
+                Welcome to DevCraft Studio
+              </span>
+              <h1 className="text-5xl font-bold text-text-primary leading-tight">
+                We Build. We Market. <span className="text-[var(--accent-cyan)]">We Deliver.</span>
+              </h1>
+              <p className="text-lg text-text-secondary max-w-md">
+                A creative digital studio helping businesses grow with conversion-focused websites and campaigns.
+              </p>
+              <div className="flex gap-4">
+                <a href="#portfolio"><NeonButton>View Our Work</NeonButton></a>
+                <a href="#services"><NeonButton variant="ghost">Our Services</NeonButton></a>
+              </div>
+              <div className="grid grid-cols-4 gap-4 pt-4">
+                {[
+                  ["50+", "Projects Completed"],
+                  ["30+", "Happy Clients"],
+                  ["3", "Core Services"],
+                  ["100%", "Commitment"]
+                ].map(([value, label]) => (
+                  <AnimatedCounter key={label} value={value} label={label} />
+                ))}
+              </div>
+            </div>
+            <div className="relative">
+              <GlassCard className="p-6">
                 <p className="text-xs uppercase tracking-wider text-[var(--accent-cyan)] mb-2">Creative Excellence</p>
-                <h3 className="text-lg font-semibold text-text-primary">Digital Solutions That Drive Growth</h3>
-                <div className="mt-3 flex gap-2">
-                  {services.slice(0, 3).map((s) => (
-                    <span key={s.title} className="text-xs px-2 py-1 rounded-full bg-bg-card border border-border text-text-secondary">
+                <h3 className="text-2xl font-semibold text-text-primary mb-4">Digital Solutions That Drive Growth</h3>
+                <div className="flex gap-2">
+                  {services.map((s) => (
+                    <span key={s.title} className="px-3 py-1 rounded-lg bg-bg-card border border-border text-sm text-text-secondary">
                       {s.title.split(" ")[0]}
                     </span>
                   ))}
                 </div>
               </GlassCard>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          {/* Desktop Hero Card */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-            animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-            transition={{ 
-              duration: reduceMotion ? 0 : 0.8, 
-              delay: reduceMotion ? 0 : 0.2,
-              type: "spring",
-              stiffness: 100
-            }}
-            className="relative hidden md:block"
-          >
-            <motion.div
-              animate={reduceMotion ? undefined : { 
-                y: [0, -10, 0],
-                rotate: [0, 1, -1, 0]
-              }}
-              transition={{ 
-                repeat: Infinity, 
-                duration: 6, 
-                ease: "easeInOut" 
-              }}
-            >
-              <GlassCard className="overflow-hidden p-4 relative">
-                <motion.div 
-                  className="absolute -inset-1 bg-gradient-to-r from-accent-cyan/20 to-accent-blue/20 blur-xl"
-                  animate={reduceMotion ? undefined : { opacity: [0.5, 0.8, 0.5] }}
-                  transition={{ repeat: Infinity, duration: 3 }}
-                />
-                <div className="rounded-xl border border-border bg-gradient-to-br from-bg-surface to-bg-base p-6 relative">
-                  <p className="mb-3 text-xs uppercase tracking-[0.2em] text-accent-cyan">Creative Excellence</p>
-                  <h3 className="text-3xl font-semibold">Digital Solutions That Drive Growth</h3>
-                  <div className="mt-6 grid grid-cols-3 gap-3 text-sm">
-                    {services.map((service, idx) => (
-                      <motion.div 
-                        key={service.title} 
-                        className="rounded-lg border border-border bg-bg-card p-3 text-text-primary"
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 + idx * 0.1 }}
-                        whileHover={{ scale: 1.05, borderColor: "var(--accent-cyan)" }}
-                      >
-                        {service.title.split(" ")[0]}
-                      </motion.div>
-                    ))}
-                  </div>
+      {/* SERVICES - Mobile Optimized */}
+      <section id="services" className="py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 md:mb-12">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-3">
+              What We Do
+            </span>
+            <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-2">Our Services</h2>
+            <p className="text-text-secondary text-sm md:text-base max-w-md mx-auto">
+              End-to-end solutions to launch and scale your business.
+            </p>
+          </div>
+
+          {/* Mobile: Vertical Cards */}
+          <div className="md:hidden space-y-3">
+            {services.map((service) => (
+              <div key={service.title} className="bg-bg-card border border-border rounded-xl p-4 flex items-start gap-4">
+                <div className="p-2 rounded-lg bg-[var(--accent-cyan)]/10">
+                  <service.icon className="h-6 w-6 text-[var(--accent-cyan)]" />
                 </div>
+                <div>
+                  <h3 className="font-semibold text-text-primary mb-1">{service.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{service.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: Grid */}
+          <div className="hidden md:grid md:grid-cols-3 gap-6">
+            {services.map((service) => (
+              <GlassCard key={service.title} className="p-6 group cursor-pointer hover:-translate-y-2 transition-transform">
+                <service.icon className="mb-4 h-10 w-10 text-[var(--accent-cyan)]" />
+                <h3 className="mb-2 text-xl font-semibold text-text-primary">{service.title}</h3>
+                <p className="text-text-secondary">{service.description}</p>
               </GlassCard>
-            </motion.div>
-          </motion.div>
+            ))}
+          </div>
         </div>
-        
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <a href="#services" className="flex flex-col items-center gap-2 text-text-muted hover:text-accent-cyan transition-colors">
-            <span className="text-xs uppercase tracking-wider">Scroll</span>
-            <ChevronDown className="h-5 w-5" />
-          </a>
-        </motion.div>
-      </motion.section>
+      </section>
 
-      <motion.section
-        id="services"
-        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <motion.div variants={fadeUp}>
-          <SectionHeading
-            eyebrow="What We Do"
-            title="Our Services"
-            subtitle="End-to-end solutions built to launch, scale, and elevate your business with confidence."
-          />
-        </motion.div>
-        <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 md:grid-cols-3">
-          {services.map((service, index) => (
-            <motion.div 
-              key={service.title} 
-              variants={fadeUp}
-              whileHover={reduceMotion ? undefined : { y: -8, transition: { duration: 0.3 } }}
-            >
-              <GlassCard className="h-full p-4 sm:p-6 group cursor-pointer relative overflow-hidden">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 to-accent-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                />
-                <motion.div
-                  className="relative"
-                  whileHover={reduceMotion ? undefined : { scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <service.icon className="mb-3 sm:mb-4 h-8 sm:h-10 w-8 sm:w-10 text-accent-cyan group-hover:text-accent-blue transition-colors" />
-                </motion.div>
-                <h3 className="mb-2 sm:mb-3 text-lg sm:text-xl font-semibold text-text-primary group-hover:text-accent-cyan transition-colors">{service.title}</h3>
-                <p className="text-sm sm:text-base text-text-secondary group-hover:text-text-primary transition-colors">{service.description}</p>
-                <motion.div 
-                  className="mt-3 sm:mt-4 flex items-center gap-2 text-accent-cyan text-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                  initial={{ x: -10 }}
-                  whileHover={{ x: 0 }}
-                >
-                  <span>Learn More</span>
-                  <ArrowUpRight className="h-4 w-4" />
-                </motion.div>
-              </GlassCard>
-            </motion.div>
-          ))}
-        </div>
-      </motion.section>
+      {/* PORTFOLIO - Mobile Optimized */}
+      <section id="portfolio" className="py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-end justify-between mb-6 md:mb-10">
+            <div>
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-2">
+                Our Work
+              </span>
+              <h2 className="text-2xl md:text-4xl font-bold text-text-primary">Featured Projects</h2>
+            </div>
+          </div>
 
-      <motion.section
-        id="portfolio"
-        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <motion.div variants={fadeUp} className="flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading
-            eyebrow="Our Work"
-            title="Featured Projects"
-            subtitle="A snapshot of selected client work spanning design, development, and growth marketing."
-          />
-          <motion.div whileHover={reduceMotion ? undefined : { scale: 1.05 }} whileTap={reduceMotion ? undefined : { scale: 0.95 }} className="hidden sm:block">
-            <NeonButton variant="ghost" className="text-sm">View All Projects</NeonButton>
-          </motion.div>
-        </motion.div>
-
-        <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-          {projects.map((project, index) => (
-            <motion.button
-              key={project.id}
-              type="button"
-              variants={scaleIn}
-              whileHover={reduceMotion ? undefined : { y: -8, transition: { duration: 0.3 } }}
-              whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-              onClick={() => setSelectedProject(project)}
-              className="text-left group"
-            >
-              <GlassCard className="overflow-hidden relative">
-                <div className="relative h-40 sm:h-48 overflow-hidden">
-                  <motion.img 
+          {/* Mobile: 2 Columns, Simpler */}
+          <div className="md:hidden grid grid-cols-2 gap-3">
+            {projects.map((project) => (
+              <button
+                key={project.id}
+                onClick={() => setSelectedProject(project)}
+                className="text-left bg-bg-card border border-border rounded-xl overflow-hidden active:scale-95 transition-transform"
+              >
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img 
                     src={project.image} 
                     alt={project.title} 
-                    className="h-full w-full object-cover"
-                    whileHover={reduceMotion ? undefined : { scale: 1.1 }}
-                    transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
-                  />
-                  <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-bg-base via-transparent to-transparent"
-                    initial={{ opacity: 0.6 }}
-                    whileHover={{ opacity: 0.8 }}
-                  />
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+                    className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </div>
-                <div className="space-y-1 sm:space-y-2 p-3 sm:p-4">
-                  <motion.p 
-                    className="text-xs uppercase tracking-[0.16em] text-accent-cyan"
-                    initial={{ x: 0 }}
-                    whileHover={{ x: 5 }}
-                  >
-                    {project.category}
-                  </motion.p>
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-base sm:text-lg font-semibold text-text-primary group-hover:text-accent-cyan transition-colors">{project.title}</h3>
-                    <motion.div
-                      initial={{ rotate: 0 }}
-                      whileHover={{ rotate: 45 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ArrowUpRight className="h-4 w-4 text-accent-cyan" />
-                    </motion.div>
+                <div className="p-3">
+                  <p className="text-[10px] uppercase tracking-wider text-[var(--accent-cyan)] mb-1">{project.category}</p>
+                  <h3 className="text-sm font-semibold text-text-primary leading-tight">{project.title}</h3>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Desktop: 4 Columns with hover effects */}
+          <div className="hidden md:grid md:grid-cols-4 gap-6">
+            {projects.map((project) => (
+              <button
+                key={project.id}
+                onClick={() => setSelectedProject(project)}
+                className="text-left group"
+              >
+                <GlassCard className="overflow-hidden hover:-translate-y-2 transition-transform">
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img 
+                      src={project.image} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
                   </div>
-                </div>
-              </GlassCard>
-            </motion.button>
-          ))}
+                  <div className="p-4">
+                    <p className="text-xs uppercase tracking-wider text-[var(--accent-cyan)] mb-1">{project.category}</p>
+                    <h3 className="font-semibold text-text-primary">{project.title}</h3>
+                  </div>
+                </GlassCard>
+              </button>
+            ))}
+          </div>
         </div>
-      </motion.section>
+      </section>
 
-      <motion.section
-        id="testimonials"
-        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={fadeUp}
-      >
-        <motion.div variants={fadeUp}>
-          <SectionHeading
-            eyebrow="Clients Love Us"
-            title="What Our Clients Say"
-            subtitle="Live testimonial data fetched from your backend API with loading state transitions."
-          />
-        </motion.div>
+      {/* TESTIMONIALS - Mobile Optimized */}
+      <section id="testimonials" className="py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-6 md:mb-10">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-2">
+              Clients Love Us
+            </span>
+            <h2 className="text-2xl md:text-4xl font-bold text-text-primary">What Our Clients Say</h2>
+          </div>
 
-        <motion.div variants={fadeUp} className="mt-8 sm:mt-10">
-          <TestimonialCarousel testimonials={testimonials} loading={loadingTestimonials} />
-        </motion.div>
-      </motion.section>
-
-      <motion.section
-        id="contact"
-        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={staggerContainer}
-      >
-        <div className="grid gap-4 sm:gap-6 md:grid-cols-[1fr_1.4fr]">
-          <motion.div variants={fadeUp}>
-            <GlassCard className="p-4 sm:p-6 h-full">
-              <SectionHeading
-                eyebrow="Get In Touch"
-                title="Ready To Start Your Project?"
-                subtitle="Share your goals and we will help turn your vision into growth-focused outcomes."
-              />
-              <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4">
-                {[
-                  { icon: Mail, label: "Email", value: "hello@devcraftstudio.com" },
-                  { icon: Phone, label: "Call", value: "+233 24 123 4567" },
-                  { icon: MapPin, label: "Location", value: "Accra, Ghana" }
-                ].map((contact, idx) => (
-                  <motion.div
-                    key={contact.label}
-                    className="flex items-center gap-3 sm:gap-4 text-text-secondary group cursor-pointer"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    whileHover={{ x: 5, color: "var(--accent-cyan)" }}
-                  >
-                    <div className="p-2 rounded-lg border border-border bg-bg-card group-hover:border-accent-cyan/30 transition-colors">
-                      <contact.icon className="h-4 sm:h-5 w-4 sm:w-5" />
-                    </div>
-                    <div>
-                      <p className="text-xs uppercase tracking-wider text-text-muted">{contact.label}</p>
-                      <p className="text-sm text-text-primary">{contact.value}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </GlassCard>
-          </motion.div>
-
-          <motion.div variants={fadeUp}>
-            <GlassCard className="p-4 sm:p-6">
-              <form className="space-y-4 sm:space-y-6">
-                <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
-                  {[
-                    { id: "name", label: "Your Name", type: "text" },
-                    { id: "email", label: "Your Email", type: "email" }
-                  ].map((field) => (
-                    <motion.div
-                      key={field.id}
-                      className="relative"
-                      animate={formFocused === field.id ? { scale: 1.02 } : { scale: 1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <motion.label
-                        className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                          formFocused === field.id 
-                            ? "-top-2 text-xs text-accent-cyan bg-bg-base px-1" 
-                            : "top-3.5 text-text-muted"
-                        }`}
-                      >
-                        {field.label}
-                      </motion.label>
-                      <input
-                        id={field.id}
-                        type={field.type}
-                        className="w-full rounded-xl border border-border bg-bg-card px-4 py-3 text-text-primary outline-none transition-all duration-300 focus:border-accent-cyan focus:bg-bg-surface focus:shadow-[0_0_20px_rgba(46,211,255,0.15)]"
-                        onFocus={() => setFormFocused(field.id)}
-                        onBlur={(e) => !e.target.value && setFormFocused(null)}
-                      />
-                    </motion.div>
+          {/* Mobile: Single Card */}
+          <div className="md:hidden">
+            {loadingTestimonials ? (
+              <div className="bg-bg-card border border-border rounded-xl p-4 animate-pulse h-32" />
+            ) : testimonials.length > 0 ? (
+              <div className="bg-bg-card border border-border rounded-xl p-4">
+                <div className="flex items-center gap-1 mb-3">
+                  {[1,2,3,4,5].map((star) => (
+                    <span key={star} className="text-[var(--accent-cyan)] text-sm">★</span>
                   ))}
                 </div>
-                <motion.div
-                  className="relative"
-                  animate={formFocused === "message" ? { scale: 1.02 } : { scale: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <motion.label
-                    className={`absolute left-4 transition-all duration-300 pointer-events-none ${
-                      formFocused === "message" 
-                        ? "-top-2 text-xs text-accent-cyan bg-bg-base px-1" 
-                        : "top-3.5 text-text-muted"
-                    }`}
-                  >
-                    Tell us about your project
-                  </motion.label>
-                  <textarea
-                    id="message"
-                    className="min-h-28 sm:min-h-32 w-full rounded-xl border border-border bg-bg-card px-4 py-3 text-text-primary outline-none transition-all duration-300 focus:border-accent-cyan focus:bg-bg-surface focus:shadow-[0_0_20px_rgba(46,211,255,0.15)] resize-none"
-                    onFocus={() => setFormFocused("message")}
-                    onBlur={(e) => !e.target.value && setFormFocused(null)}
-                  />
-                </motion.div>
-                <motion.div
-                  whileHover={reduceMotion ? undefined : { scale: 1.02 }}
-                  whileTap={reduceMotion ? undefined : { scale: 0.98 }}
-                >
-                  <NeonButton className="w-full text-sm sm:text-base py-3">
-                    <motion.span 
-                      className="inline-flex items-center gap-2"
-                      animate={reduceMotion ? undefined : { x: [0, 5, 0] }}
-                      transition={{ repeat: Infinity, duration: 2 }}
-                    >
-                      Send Message <Rocket className="h-4 w-4" />
-                    </motion.span>
-                  </NeonButton>
-                </motion.div>
-              </form>
-            </GlassCard>
-          </motion.div>
-        </div>
-      </motion.section>
+                <p className="text-text-secondary text-sm mb-3 leading-relaxed">
+                  &ldquo;{testimonials[0].message}&rdquo;
+                </p>
+                <p className="font-semibold text-text-primary text-sm">{testimonials[0].name}</p>
+              </div>
+            ) : null}
+          </div>
 
-      <motion.footer
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="border-t border-border px-4 sm:px-5 py-8 sm:py-10"
-      >
-        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-4 text-sm text-text-muted md:flex-row md:items-center">
-          <p className="text-text-secondary">© 2026 DevCraft Studio. All rights reserved.</p>
-          <p className="inline-flex items-center gap-2 text-text-secondary">
-            Designed with motion-forward UX <Sparkles className="h-4 w-4 text-accent-cyan" />
+          {/* Desktop: Carousel */}
+          <div className="hidden md:block">
+            <TestimonialCarousel testimonials={testimonials} loading={loadingTestimonials} />
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT - Mobile Optimized */}
+      <section id="contact" className="py-12 md:py-20">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8 md:mb-12">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-2">
+              Get In Touch
+            </span>
+            <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-2">Start Your Project</h2>
+          </div>
+
+          <div className="max-w-md mx-auto md:max-w-none md:grid md:grid-cols-2 md:gap-8">
+            {/* Mobile: Simple Form */}
+            <div className="bg-bg-card border border-border rounded-2xl p-5 md:p-8">
+              <form className="space-y-4">
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className="w-full rounded-xl border border-border bg-bg-base px-4 py-3 text-text-primary text-sm outline-none focus:border-[var(--accent-cyan)] transition-colors"
+                />
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className="w-full rounded-xl border border-border bg-bg-base px-4 py-3 text-text-primary text-sm outline-none focus:border-[var(--accent-cyan)] transition-colors"
+                />
+                <textarea
+                  placeholder="Tell us about your project"
+                  rows={4}
+                  className="w-full rounded-xl border border-border bg-bg-base px-4 py-3 text-text-primary text-sm outline-none focus:border-[var(--accent-cyan)] transition-colors resize-none"
+                />
+                <NeonButton className="w-full">Send Message</NeonButton>
+              </form>
+            </div>
+
+            {/* Mobile: Contact Info Below */}
+            <div className="mt-6 md:mt-0 space-y-4 md:space-y-6">
+              <p className="text-text-secondary text-sm md:text-base">
+                Ready to transform your digital presence? Let&apos;s discuss how we can help grow your business.
+              </p>
+              <div className="space-y-3">
+                {[
+                  { icon: Mail, label: "hello@devcraftstudio.com" },
+                  { icon: Phone, label: "+233 24 123 4567" },
+                  { icon: MapPin, label: "Accra, Ghana" }
+                ].map((item) => (
+                  <div key={item.label} className="flex items-center gap-3 text-text-primary">
+                    <div className="p-2 rounded-lg bg-[var(--accent-cyan)]/10">
+                      <item.icon className="h-4 w-4 text-[var(--accent-cyan)]" />
+                    </div>
+                    <span className="text-sm">{item.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="border-t border-border py-6 md:py-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center md:text-left md:flex md:justify-between md:items-center">
+          <p className="text-text-muted text-sm">© 2026 DevCraft Studio</p>
+          <p className="text-text-muted text-sm flex items-center justify-center gap-1 mt-2 md:mt-0">
+            Made with <Sparkles className="h-3 w-3 text-[var(--accent-cyan)]" /> in Ghana
           </p>
         </div>
-      </motion.footer>
+      </footer>
 
-      <AnimatePresence>
-        {selectedProject ? (
-          <motion.div
-            className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 sm:p-5 backdrop-blur"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedProject(null)}
+      {/* PROJECT MODAL - Lightweight */}
+      {selectedProject && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setSelectedProject(null)}
+        >
+          <div
+            className="bg-bg-surface border border-border rounded-2xl max-w-lg w-full overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              initial={{ y: 20, opacity: 0, scale: 0.96 }}
-              animate={{ y: 0, opacity: 1, scale: 1 }}
-              exit={{ y: 20, opacity: 0, scale: 0.96 }}
-              transition={{ duration: 0.25 }}
-              onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}
-              className="w-full max-w-2xl mx-4"
-            >
-              <GlassCard className="overflow-hidden">
-                <img
-                  src={selectedProject.image}
-                  alt={selectedProject.title}
-                  className="h-48 sm:h-56 w-full object-cover md:h-72"
-                />
-                <div className="space-y-3 sm:space-y-4 p-4 sm:p-6">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-accent-cyan">
-                        {selectedProject.category}
-                      </p>
-                      <h3 className="text-xl sm:text-2xl font-semibold text-text-primary">{selectedProject.title}</h3>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedProject(null)}
-                      className="rounded-full border border-border p-2 text-text-secondary transition hover:border-accent-cyan hover:text-accent-cyan"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <p className="text-text-secondary">{selectedProject.blurb}</p>
+            <img
+              src={selectedProject.image}
+              alt={selectedProject.title}
+              className="w-full h-48 sm:h-56 object-cover"
+            />
+            <div className="p-4 sm:p-6">
+              <div className="flex items-start justify-between gap-2 mb-3">
+                <div>
+                  <p className="text-xs uppercase text-[var(--accent-cyan)] mb-1">{selectedProject.category}</p>
+                  <h3 className="text-lg sm:text-xl font-bold text-text-primary">{selectedProject.title}</h3>
                 </div>
-              </GlassCard>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="p-1.5 rounded-lg hover:bg-bg-card transition-colors"
+                >
+                  <X className="h-5 w-5 text-text-muted" />
+                </button>
+              </div>
+              <p className="text-text-secondary text-sm leading-relaxed">{selectedProject.blurb}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.main>
   );
 }

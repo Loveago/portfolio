@@ -156,14 +156,23 @@ h4 {
   animation: shimmer 2s infinite;
 }
 
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
   html {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   .section-shell::before {
     filter: blur(20px);
-    opacity: 0.5;
+    opacity: 0.4;
   }
 }
