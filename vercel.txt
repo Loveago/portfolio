@@ -36,23 +36,35 @@ STEP 4: DEPLOY
 3. Your site will be live at: https://portfolio-loveago.vercel.app
 (or similar based on your project name)
 
-STEP 5: DATABASE SETUP (ONE-TIME)
-----------------------------------
-After first deploy, run these commands to setup your database:
+STEP 5: DATABASE SETUP (NO CLI REQUIRED)
+------------------------------------------
+You have 3 options to set up your database without Vercel CLI:
 
-Option A - Using Vercel CLI:
-1. Install Vercel CLI: npm i -g vercel
-2. Login: vercel login
-3. Link project: vercel link
-4. Run migration: vercel env pull .env.local
-5. npx prisma db push
-6. npm run db:seed
+OPTION A - Local Setup (Recommended):
+1. Make sure your local .env.local has the SAME DATABASE_URL as Vercel
+2. Run locally: npx prisma db push
+3. Run locally: npm run db:seed
+4. Push any changes: git push origin main
+5. The deployed site will now use the same database with seeded data
 
-Option B - Local then push:
-1. Set DATABASE_URL in your local .env
-2. Run: npx prisma db push
-3. Run: npm run db:seed
-4. Redeploy: git push origin main
+OPTION B - Vercel Dashboard Only:
+If you don't have CLI access and can't run locally:
+1. In Vercel Dashboard, go to your project
+2. Click "Deployments" tab
+3. Find your latest deployment, click the three dots (...)
+4. Click "Redeploy" (this rebuilds with latest env vars)
+5. For database setup, you'll need to:
+   - Use a database provider with a web UI (like Supabase, Railway, or Neon)
+   - Create tables manually or use their seed features
+   - OR ask someone with CLI access to run the migrations for you
+
+OPTION C - Use Vercel Postgres (Easiest):
+1. In Vercel Dashboard: Storage > Create Database > Postgres
+2. Connect it to your project (automatically sets DATABASE_URL)
+3. Go to your project Settings > Functions
+4. Set Function Region to match your database region
+5. Redeploy your project
+6. The database will be ready to use (no migrations needed for first run)
 
 STEP 6: CUSTOM DOMAIN (Optional)
 --------------------------------
