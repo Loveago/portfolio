@@ -60,28 +60,28 @@ const projects: ProjectItem[] = [
     id: 1,
     title: "E-Commerce Platform",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=90",
     blurb: "A performant storefront with tailored checkout flows and real-time analytics."
   },
   {
     id: 2,
     title: "Social Media Campaign",
     category: "Marketing",
-    image: "https://images.unsplash.com/photo-1611162616805-6c0f6a8f9f6f?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe1?w=800&q=90",
     blurb: "A high-converting launch campaign that boosted qualified traffic by 250%."
   },
   {
     id: 3,
     title: "Brand Identity Kit",
     category: "Graphics Design",
-    image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=800&q=90",
     blurb: "A cohesive visual system that elevated trust and improved cross-channel consistency."
   },
   {
     id: 4,
     title: "SaaS Dashboard",
     category: "Web Development",
-    image: "https://images.unsplash.com/photo-1551281044-8d8d8d8f0f54?auto=format&fit=crop&w=900&q=80",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=90",
     blurb: "A modular product dashboard focused on retention, clarity, and team productivity."
   }
 ];
