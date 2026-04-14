@@ -8,9 +8,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function NeonButton({ children, variant = "solid", className = "", ...props }: ButtonProps) {
   const variants = {
     solid:
-      "bg-gradient-to-r from-[var(--accent-cyan)] to-[var(--accent-blue)] text-white shadow-[0_0_30px_rgba(46,211,255,0.35)] hover:shadow-[0_0_40px_rgba(92,124,255,0.5)]",
+      "bg-gradient-to-r from-[var(--accent-cyan)] via-[var(--accent-blue)] to-[var(--accent-purple)] text-white shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] hover:scale-105",
     ghost:
-      "bg-bg-card text-text-primary border border-border hover:border-[var(--accent-cyan)]/70 hover:bg-bg-surface"
+      "bg-bg-card/80 text-text-primary border-2 border-border hover:border-[var(--accent-pink)] hover:text-[var(--accent-pink)] hover:shadow-[0_0_20px_rgba(255,107,157,0.2)]"
   };
 
   const buttonVariant = variants[variant as keyof typeof variants];
@@ -32,7 +32,7 @@ type GlassCardProps = {
 
 export function GlassCard({ children, className = "" }: GlassCardProps) {
   return (
-    <div className={`rounded-2xl border border-border bg-bg-card backdrop-blur-md shadow-glass ${className}`}>
+    <div className={`rounded-2xl border-2 border-border bg-bg-card/90 backdrop-blur-xl shadow-card hover:shadow-card-hover transition-shadow duration-300 ${className}`}>
       {children}
     </div>
   );
@@ -47,11 +47,12 @@ type SectionHeadingProps = {
 export function SectionHeading({ eyebrow, title, subtitle }: SectionHeadingProps) {
   return (
     <div className="max-w-xl space-y-2 sm:space-y-3">
-      <p className="inline-flex rounded-full border border-[var(--accent-cyan)]/30 bg-[var(--accent-cyan)]/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-[var(--accent-cyan)]">
+      <p className="inline-flex items-center gap-2 rounded-full border-2 border-[var(--accent-pink)]/40 bg-gradient-to-r from-[var(--accent-pink)]/20 to-[var(--accent-cyan)]/20 px-4 py-1.5 text-xs uppercase tracking-[0.15em] text-[var(--accent-pink)] font-bold shadow-[0_0_15px_rgba(255,107,157,0.2)]">
+        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-sunshine)] animate-pulse" />
         {eyebrow}
       </p>
-      <h2 className="text-2xl sm:text-3xl font-semibold leading-tight text-text-primary md:text-4xl">{title}</h2>
-      <p className="text-sm text-text-secondary md:text-base">{subtitle}</p>
+      <h2 className="text-2xl sm:text-3xl font-bold leading-tight text-text-primary md:text-4xl bg-gradient-to-r from-text-primary to-[var(--accent-purple)] bg-clip-text">{title}</h2>
+      <p className="text-sm text-text-secondary md:text-base leading-relaxed">{subtitle}</p>
     </div>
   );
 }

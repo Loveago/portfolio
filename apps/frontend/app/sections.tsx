@@ -353,7 +353,7 @@ function useNavbarScroll() {
   return { hidden, scrolled };
 }
 
-// Theme Toggle Component
+// Theme Toggle Component - Playful & Colorful
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const reduceMotion = useReducedMotion();
@@ -361,34 +361,50 @@ function ThemeToggle() {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="relative p-2.5 rounded-xl border border-border bg-bg-card/50 backdrop-blur-sm hover:border-accent-cyan/50 transition-colors"
-      whileHover={reduceMotion ? undefined : { scale: 1.05 }}
-      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+      className="relative p-2.5 rounded-xl border-2 border-border bg-bg-card/80 backdrop-blur-sm hover:border-[var(--accent-cyan)] hover:shadow-[0_0_20px_rgba(0,212,255,0.3)] transition-all"
+      whileHover={reduceMotion ? undefined : { scale: 1.1, rotate: 5 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.9 }}
       aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
     >
       <AnimatePresence mode="wait">
         {theme === "dark" ? (
           <motion.div
             key="moon"
-            initial={{ rotate: -90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 90, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: 180 }}
+            transition={{ duration: 0.3, type: "spring" }}
           >
-            <Moon className="w-5 h-5 text-accent-cyan" />
+            <Moon className="w-5 h-5 text-[var(--accent-cyan)]" />
           </motion.div>
         ) : (
           <motion.div
             key="sun"
-            initial={{ rotate: 90, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: -90, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={{ scale: 0, rotate: 180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            exit={{ scale: 0, rotate: -180 }}
+            transition={{ duration: 0.3, type: "spring" }}
           >
-            <Sun className="w-5 h-5 text-accent-orange" />
+            <Sun className="w-5 h-5 text-[var(--accent-sunshine)]" />
           </motion.div>
         )}
       </AnimatePresence>
+      
+      {/* Sparkle effect in light mode */}
+      {theme === "light" && (
+        <>
+          <motion.span
+            className="absolute -top-1 -right-1 w-2 h-2 bg-[var(--accent-pink)] rounded-full"
+            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          />
+          <motion.span
+            className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[var(--accent-mint)] rounded-full"
+            animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
+            transition={{ repeat: Infinity, duration: 1.2, delay: 0.3 }}
+          />
+        </>
+      )}
     </motion.button>
   );
 }
