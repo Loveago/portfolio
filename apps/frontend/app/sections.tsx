@@ -121,22 +121,6 @@ const scaleIn = {
   }
 };
 
-// Scroll Progress Component
-function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 origin-left z-[60]"
-      style={{ scaleX }}
-    />
-  );
-}
 
 // Animated Counter Component
 function AnimatedCounter({ value, label }: { value: string; label: string }) {
@@ -435,20 +419,9 @@ export function HomePage() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
-  const [formFocused, setFormFocused] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const { hidden, scrolled } = useNavbarScroll();
-  const heroRef = useRef<HTMLDivElement>(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-  
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-  const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
 
   useEffect(() => {
     const loadTestimonials = async () => {
@@ -482,7 +455,6 @@ export function HomePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.35 }}
     >
-      <ScrollProgress />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-grid bg-[size:24px_24px] opacity-[0.06]" />
 
       <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
