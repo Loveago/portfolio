@@ -67,7 +67,7 @@ const projects: ProjectItem[] = [
     id: 2,
     title: "Social Media Campaign",
     category: "Marketing",
-    image: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe1?w=800&q=90",
+    image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&q=90",
     blurb: "A high-converting launch campaign that boosted qualified traffic by 250%."
   },
   {
