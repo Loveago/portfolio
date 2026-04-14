@@ -1,0 +1,98 @@
+VERCEL DEPLOYMENT INSTRUCTIONS
+===============================
+
+Project: DevCraft Studio Portfolio
+Repository: https://github.com/Loveago/portfolio.git
+
+STEP 1: IMPORT PROJECT TO VERCEL
+--------------------------------
+1. Go to https://vercel.com/dashboard
+2. Click "Add New Project" (or "Import Git Repository")
+3. Select "Import Git Repository"
+4. Find and select: Loveago/portfolio
+5. Click "Import"
+
+STEP 2: CONFIGURE PROJECT SETTINGS
+----------------------------------
+1. Framework Preset: Select "Next.js"
+2. Root Directory: Enter "apps/frontend"
+   (This is crucial - the frontend app is in the apps/frontend folder)
+
+STEP 3: ENVIRONMENT VARIABLES
+-----------------------------
+Add these environment variables in the Vercel dashboard:
+
+Name: DATABASE_URL
+Value: postgresql://username:password@host:port/database_name?schema=public
+(Replace with your actual PostgreSQL database URL)
+
+Example:
+DATABASE_URL=postgresql://postgres:password@db.example.com:5432/portfolio_db?schema=public
+
+STEP 4: DEPLOY
+--------------
+1. Click "Deploy"
+2. Wait for build to complete (usually 2-3 minutes)
+3. Your site will be live at: https://portfolio-loveago.vercel.app
+(or similar based on your project name)
+
+STEP 5: DATABASE SETUP (ONE-TIME)
+----------------------------------
+After first deploy, run these commands to setup your database:
+
+Option A - Using Vercel CLI:
+1. Install Vercel CLI: npm i -g vercel
+2. Login: vercel login
+3. Link project: vercel link
+4. Run migration: vercel env pull .env.local
+5. npx prisma db push
+6. npm run db:seed
+
+Option B - Local then push:
+1. Set DATABASE_URL in your local .env
+2. Run: npx prisma db push
+3. Run: npm run db:seed
+4. Redeploy: git push origin main
+
+STEP 6: CUSTOM DOMAIN (Optional)
+--------------------------------
+1. In Vercel dashboard, go to Project Settings > Domains
+2. Add your custom domain
+3. Follow DNS configuration instructions
+
+IMPORTANT NOTES
+---------------
+- This is a single-app deployment (frontend only)
+- The Express backend is NOT deployed separately
+- API routes are handled by Next.js in apps/frontend/app/api/
+- PostgreSQL database is required for testimonials to work
+- Free tier on Vercel works perfectly for this setup
+
+TROUBLESHOOTING
+---------------
+- Build fails: Check that Root Directory is set to "apps/frontend"
+- Database errors: Verify DATABASE_URL is set correctly
+- 404 on API routes: Ensure you're using /api/testimonials (not backend routes)
+- Styles missing: Verify Tailwind is configured correctly
+
+POST-DEPLOYMENT URLS
+--------------------
+Your deployed site will have these endpoints:
+- Homepage: https://your-domain.vercel.app/
+- API: https://your-domain.vercel.app/api/testimonials
+
+LOCAL DEVELOPMENT
+-----------------
+To run locally:
+1. npm install
+2. Copy apps/frontend/.env.local.example to apps/frontend/.env.local
+3. Set your DATABASE_URL
+4. npm run db:migrate
+5. npm run db:seed
+6. npm run dev
+
+SUPPORT
+-------
+- Vercel Docs: https://vercel.com/docs
+- Next.js on Vercel: https://nextjs.org/docs/deployment
+- Prisma with Vercel: https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-vercel
