@@ -10,14 +10,18 @@ import {
   Code2,
   Mail,
   MapPin,
+  Menu,
   MessageSquare,
+  Moon,
   Phone,
   Rocket,
   Sparkles,
+  Sun,
   X,
   ChevronDown
 } from "lucide-react";
 import { GlassCard, NeonButton, SectionHeading } from "@portfolio/ui";
+import { useTheme } from "./providers";
 
 type Testimonial = {
   id: number;
@@ -221,8 +225,8 @@ function TextReveal({ children, className = "" }: { children: string; className?
 // Shimmer Loading Effect
 function ShimmerCard() {
   return (
-    <div className="h-48 rounded-2xl border border-white/10 bg-white/5 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer" />
+    <div className="h-40 sm:h-48 rounded-2xl border border-border bg-bg-card overflow-hidden relative">
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border to-transparent animate-shimmer" />
     </div>
   );
 }
@@ -247,7 +251,7 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-3 sm:gap-4 md:grid-cols-3">
         {[0, 1, 2].map((i) => <ShimmerCard key={i} />)}
       </div>
     );
@@ -263,7 +267,7 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
             animate={{ opacity: 1, x: 0 }}
             exit={reduceMotion ? undefined : { opacity: 0, x: -100 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="grid gap-4 md:grid-cols-3"
+            className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
           >
             {[0, 1, 2].map((offset) => {
               const idx = (currentIndex + offset) % testimonials.length;
@@ -277,12 +281,12 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: offset * 0.1 }}
                 >
-                  <GlassCard className="h-full p-6 hover:border-cyan-300/30 transition-colors duration-300">
-                    <Sparkles className="mb-4 h-5 w-5 text-cyan-300" />
-                    <p className="text-slate-200 mb-4">&ldquo;{item.message}&rdquo;</p>
+                  <GlassCard className="h-full p-4 sm:p-6 hover:border-[var(--accent-cyan)]/30 transition-colors duration-300">
+                    <Sparkles className="mb-3 sm:mb-4 h-4 sm:h-5 w-4 sm:w-5 text-[var(--accent-cyan)]" />
+                    <p className="text-text-secondary text-sm sm:text-base mb-3 sm:mb-4">&ldquo;{item.message}&rdquo;</p>
                     <div className="flex items-center justify-between">
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="text-sm text-cyan-200">★★★★★</p>
+                      <p className="font-semibold text-text-primary text-sm sm:text-base">{item.name}</p>
+                      <p className="text-sm text-[var(--accent-cyan)]">★★★★★</p>
                     </div>
                   </GlassCard>
                 </motion.div>
@@ -292,12 +296,12 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
         </AnimatePresence>
       </div>
       
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="flex justify-center gap-2 mt-4 sm:mt-6">
         <button
           onClick={prev}
-          className="p-2 rounded-full border border-white/20 hover:border-cyan-300/50 hover:bg-white/5 transition-all"
+          className="p-2 rounded-full border border-border hover:border-[var(--accent-cyan)]/50 hover:bg-bg-card transition-all"
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-4 sm:h-5 w-4 sm:w-5 text-text-primary" />
         </button>
         <div className="flex gap-1 items-center">
           {testimonials.map((_, idx) => (
@@ -305,16 +309,16 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
               key={idx}
               onClick={() => setCurrentIndex(idx)}
               className={`w-2 h-2 rounded-full transition-all ${
-                idx === currentIndex ? "bg-cyan-400 w-4" : "bg-white/30 hover:bg-white/50"
+                idx === currentIndex ? "bg-[var(--accent-cyan)] w-4" : "bg-border hover:bg-text-muted"
               }`}
             />
           ))}
         </div>
         <button
           onClick={next}
-          className="p-2 rounded-full border border-white/20 hover:border-cyan-300/50 hover:bg-white/5 transition-all"
+          className="p-2 rounded-full border border-border hover:border-[var(--accent-cyan)]/50 hover:bg-bg-card transition-all"
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-4 sm:h-5 w-4 sm:w-5 text-text-primary" />
         </button>
       </div>
     </div>
@@ -349,11 +353,111 @@ function useNavbarScroll() {
   return { hidden, scrolled };
 }
 
+// Theme Toggle Component
+function ThemeToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <motion.button
+      onClick={toggleTheme}
+      className="relative p-2.5 rounded-xl border border-border bg-bg-card/50 backdrop-blur-sm hover:border-accent-cyan/50 transition-colors"
+      whileHover={reduceMotion ? undefined : { scale: 1.05 }}
+      whileTap={reduceMotion ? undefined : { scale: 0.95 }}
+      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+    >
+      <AnimatePresence mode="wait">
+        {theme === "dark" ? (
+          <motion.div
+            key="moon"
+            initial={{ rotate: -90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: 90, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Moon className="w-5 h-5 text-accent-cyan" />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="sun"
+            initial={{ rotate: 90, opacity: 0 }}
+            animate={{ rotate: 0, opacity: 1 }}
+            exit={{ rotate: -90, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Sun className="w-5 h-5 text-accent-orange" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+}
+
+// Mobile Menu Component
+function MobileMenu({ 
+  isOpen, 
+  onClose 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void;
+}) {
+  const reduceMotion = useReducedMotion();
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+          />
+          <motion.div
+            className="fixed top-0 right-0 bottom-0 w-[280px] bg-bg-surface border-l border-border z-50 md:hidden p-6"
+            initial={reduceMotion ? undefined : { x: "100%" }}
+            animate={{ x: 0 }}
+            exit={reduceMotion ? undefined : { x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          >
+            <div className="flex items-center justify-between mb-8">
+              <span className="text-lg font-semibold text-text-primary">Menu</span>
+              <button onClick={onClose} className="p-2 rounded-lg hover:bg-white/5">
+                <X className="w-5 h-5 text-text-secondary" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-4">
+              {navItems.map((item, idx) => (
+                <motion.a
+                  key={item}
+                  href={`#${item}`}
+                  onClick={onClose}
+                  className="text-lg text-text-secondary hover:text-text-primary transition-colors py-2 border-b border-border/50"
+                  initial={reduceMotion ? undefined : { opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  {item[0].toUpperCase() + item.slice(1)}
+                </motion.a>
+              ))}
+            </nav>
+            <div className="mt-8">
+              <ThemeToggle />
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export function HomePage() {
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loadingTestimonials, setLoadingTestimonials] = useState(true);
   const [formFocused, setFormFocused] = useState<string | null>(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
   const { hidden, scrolled } = useNavbarScroll();
   const heroRef = useRef<HTMLDivElement>(null);
@@ -402,30 +506,53 @@ export function HomePage() {
       <ScrollProgress />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-grid bg-[size:24px_24px] opacity-[0.06]" />
 
+      <MobileMenu isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+
       <motion.header 
         className={`fixed top-0 left-0 right-0 z-50 border-b transition-all duration-300 ${
-          scrolled ? "border-white/10 bg-[#050713]/85 backdrop-blur-xl" : "border-transparent bg-transparent"
+          scrolled 
+            ? "border-border bg-bg-base/85 backdrop-blur-xl" 
+            : "border-transparent bg-transparent"
         }`}
         initial={{ y: 0 }}
         animate={{ y: hidden ? -100 : 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
       >
-        <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <a href="#home" className="text-lg font-semibold tracking-wide">
-            DEVCRAFT <span className="text-cyan-300">STUDIO</span>
+        <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-5 py-3 sm:py-4">
+          <a href="#home" className="text-base sm:text-lg font-semibold tracking-wide text-text-primary">
+            DEVCRAFT <span className="text-accent-cyan">STUDIO</span>
           </a>
-          <ul className="hidden gap-6 text-sm text-slate-300 md:flex">
+          
+          {/* Desktop Navigation */}
+          <ul className="hidden gap-6 text-sm text-text-secondary md:flex">
             {navItems.map((item) => (
               <li key={item}>
-                <a href={`#${item}`} className="transition-colors hover:text-white">
+                <a href={`#${item}`} className="transition-colors hover:text-text-primary">
                   {item[0].toUpperCase() + item.slice(1)}
                 </a>
               </li>
             ))}
           </ul>
-          <a href="#contact">
-            <NeonButton>Let&apos;s Work Together</NeonButton>
-          </a>
+          
+          {/* Desktop CTA and Theme Toggle */}
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
+            <a href="#contact">
+              <NeonButton className="text-sm">Let&apos;s Work Together</NeonButton>
+            </a>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 rounded-xl border border-border bg-bg-card/50 backdrop-blur-sm"
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5 text-text-primary" />
+            </button>
+          </div>
         </nav>
       </motion.header>
 
@@ -435,28 +562,28 @@ export function HomePage() {
         className="section-shell mx-auto max-w-6xl px-5 pt-24 pb-16 md:pt-32 md:pb-24 min-h-screen flex items-center"
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
       >
-        <div className="grid items-center gap-12 md:grid-cols-2 w-full">
+        <div className="grid items-center gap-8 md:gap-12 md:grid-cols-2 w-full">
           <motion.div
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
-            className="space-y-6"
+            className="space-y-5 md:space-y-6 text-center md:text-left"
           >
             <motion.p 
               variants={fadeUp}
-              className="inline-flex rounded-full border border-cyan-300/30 bg-cyan-400/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-cyan-200"
+              className="inline-flex rounded-full border border-accent-cyan/30 bg-accent-cyan/10 px-3 py-1 text-xs uppercase tracking-[0.2em] text-accent-cyan"
             >
               Welcome to DevCraft Studio
             </motion.p>
-            <h1 className="text-4xl font-semibold leading-tight text-white md:text-6xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold leading-tight text-text-primary">
               <TextReveal>We Build. We Market.</TextReveal>{" "}
-              <span className="text-cyan-300">
+              <span className="text-accent-cyan">
                 <TextReveal>We Deliver.</TextReveal>
               </span>
             </h1>
             <motion.p 
               variants={fadeUp}
-              className="max-w-xl text-lg text-slate-300"
+              className="max-w-xl mx-auto md:mx-0 text-base md:text-lg text-text-secondary"
             >
               A creative digital studio helping businesses grow with conversion-focused websites,
               strategic campaigns, and unforgettable visual storytelling.
@@ -483,7 +610,7 @@ export function HomePage() {
             </motion.div>
             <motion.div 
               variants={staggerContainer}
-              className="grid grid-cols-2 gap-4 pt-4 md:grid-cols-4"
+              className="grid grid-cols-2 gap-3 sm:gap-4 pt-4 md:grid-cols-4"
             >
               {[
                 ["50+", "Projects Completed"],
@@ -505,7 +632,7 @@ export function HomePage() {
               type: "spring",
               stiffness: 100
             }}
-            className="relative"
+            className="relative hidden md:block"
           >
             <motion.div
               animate={reduceMotion ? undefined : { 
@@ -520,22 +647,22 @@ export function HomePage() {
             >
               <GlassCard className="overflow-hidden p-4 relative">
                 <motion.div 
-                  className="absolute -inset-1 bg-gradient-to-r from-cyan-400/20 to-blue-500/20 blur-xl"
+                  className="absolute -inset-1 bg-gradient-to-r from-accent-cyan/20 to-accent-blue/20 blur-xl"
                   animate={reduceMotion ? undefined : { opacity: [0.5, 0.8, 0.5] }}
                   transition={{ repeat: Infinity, duration: 3 }}
                 />
-                <div className="rounded-xl border border-white/10 bg-gradient-to-br from-[#0c1230] to-[#070a18] p-6 relative">
-                  <p className="mb-3 text-xs uppercase tracking-[0.2em] text-cyan-200">Creative Excellence</p>
+                <div className="rounded-xl border border-border bg-gradient-to-br from-bg-surface to-bg-base p-6 relative">
+                  <p className="mb-3 text-xs uppercase tracking-[0.2em] text-accent-cyan">Creative Excellence</p>
                   <h3 className="text-3xl font-semibold">Digital Solutions That Drive Growth</h3>
                   <div className="mt-6 grid grid-cols-3 gap-3 text-sm">
                     {services.map((service, idx) => (
                       <motion.div 
                         key={service.title} 
-                        className="rounded-lg border border-white/10 bg-white/5 p-3"
+                        className="rounded-lg border border-border bg-bg-card p-3 text-text-primary"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.5 + idx * 0.1 }}
-                        whileHover={{ scale: 1.05, borderColor: "rgba(46, 211, 255, 0.3)" }}
+                        whileHover={{ scale: 1.05, borderColor: "var(--accent-cyan)" }}
                       >
                         {service.title.split(" ")[0]}
                       </motion.div>
@@ -548,11 +675,11 @@ export function HomePage() {
         </div>
         
         <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden md:flex"
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          <a href="#services" className="flex flex-col items-center gap-2 text-slate-400 hover:text-cyan-300 transition-colors">
+          <a href="#services" className="flex flex-col items-center gap-2 text-text-muted hover:text-accent-cyan transition-colors">
             <span className="text-xs uppercase tracking-wider">Scroll</span>
             <ChevronDown className="h-5 w-5" />
           </a>
@@ -561,7 +688,7 @@ export function HomePage() {
 
       <motion.section
         id="services"
-        className="mx-auto max-w-6xl px-5 py-16"
+        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -574,28 +701,28 @@ export function HomePage() {
             subtitle="End-to-end solutions built to launch, scale, and elevate your business with confidence."
           />
         </motion.div>
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
+        <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 md:grid-cols-3">
           {services.map((service, index) => (
             <motion.div 
               key={service.title} 
               variants={fadeUp}
               whileHover={reduceMotion ? undefined : { y: -8, transition: { duration: 0.3 } }}
             >
-              <GlassCard className="h-full p-6 group cursor-pointer relative overflow-hidden">
+              <GlassCard className="h-full p-4 sm:p-6 group cursor-pointer relative overflow-hidden">
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-cyan-400/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  className="absolute inset-0 bg-gradient-to-br from-accent-cyan/5 to-accent-blue/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 />
                 <motion.div
                   className="relative"
                   whileHover={reduceMotion ? undefined : { scale: 1.1 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <service.icon className="mb-4 h-10 w-10 text-cyan-300 group-hover:text-cyan-200 transition-colors" />
+                  <service.icon className="mb-3 sm:mb-4 h-8 sm:h-10 w-8 sm:w-10 text-accent-cyan group-hover:text-accent-blue transition-colors" />
                 </motion.div>
-                <h3 className="mb-3 text-xl font-semibold group-hover:text-cyan-200 transition-colors">{service.title}</h3>
-                <p className="text-slate-300 group-hover:text-slate-200 transition-colors">{service.description}</p>
+                <h3 className="mb-2 sm:mb-3 text-lg sm:text-xl font-semibold text-text-primary group-hover:text-accent-cyan transition-colors">{service.title}</h3>
+                <p className="text-sm sm:text-base text-text-secondary group-hover:text-text-primary transition-colors">{service.description}</p>
                 <motion.div 
-                  className="mt-4 flex items-center gap-2 text-cyan-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="mt-3 sm:mt-4 flex items-center gap-2 text-accent-cyan text-sm opacity-0 group-hover:opacity-100 transition-opacity"
                   initial={{ x: -10 }}
                   whileHover={{ x: 0 }}
                 >
@@ -610,7 +737,7 @@ export function HomePage() {
 
       <motion.section
         id="portfolio"
-        className="mx-auto max-w-6xl px-5 py-16"
+        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -622,12 +749,12 @@ export function HomePage() {
             title="Featured Projects"
             subtitle="A snapshot of selected client work spanning design, development, and growth marketing."
           />
-          <motion.div whileHover={reduceMotion ? undefined : { scale: 1.05 }} whileTap={reduceMotion ? undefined : { scale: 0.95 }}>
-            <NeonButton variant="ghost">View All Projects</NeonButton>
+          <motion.div whileHover={reduceMotion ? undefined : { scale: 1.05 }} whileTap={reduceMotion ? undefined : { scale: 0.95 }} className="hidden sm:block">
+            <NeonButton variant="ghost" className="text-sm">View All Projects</NeonButton>
           </motion.div>
         </motion.div>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 sm:mt-10 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
           {projects.map((project, index) => (
             <motion.button
               key={project.id}
@@ -639,7 +766,7 @@ export function HomePage() {
               className="text-left group"
             >
               <GlassCard className="overflow-hidden relative">
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-40 sm:h-48 overflow-hidden">
                   <motion.img 
                     src={project.image} 
                     alt={project.title} 
@@ -648,7 +775,7 @@ export function HomePage() {
                     transition={{ duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
                   />
                   <motion.div 
-                    className="absolute inset-0 bg-gradient-to-t from-[#050713] via-transparent to-transparent"
+                    className="absolute inset-0 bg-gradient-to-t from-bg-base via-transparent to-transparent"
                     initial={{ opacity: 0.6 }}
                     whileHover={{ opacity: 0.8 }}
                   />
@@ -656,22 +783,22 @@ export function HomePage() {
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
                   />
                 </div>
-                <div className="space-y-2 p-4">
+                <div className="space-y-1 sm:space-y-2 p-3 sm:p-4">
                   <motion.p 
-                    className="text-xs uppercase tracking-[0.16em] text-cyan-200"
+                    className="text-xs uppercase tracking-[0.16em] text-accent-cyan"
                     initial={{ x: 0 }}
                     whileHover={{ x: 5 }}
                   >
                     {project.category}
                   </motion.p>
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-lg font-semibold group-hover:text-cyan-200 transition-colors">{project.title}</h3>
+                    <h3 className="text-base sm:text-lg font-semibold text-text-primary group-hover:text-accent-cyan transition-colors">{project.title}</h3>
                     <motion.div
                       initial={{ rotate: 0 }}
                       whileHover={{ rotate: 45 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <ArrowUpRight className="h-4 w-4 text-cyan-200" />
+                      <ArrowUpRight className="h-4 w-4 text-accent-cyan" />
                     </motion.div>
                   </div>
                 </div>
@@ -683,7 +810,7 @@ export function HomePage() {
 
       <motion.section
         id="testimonials"
-        className="mx-auto max-w-6xl px-5 py-16"
+        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -697,28 +824,28 @@ export function HomePage() {
           />
         </motion.div>
 
-        <motion.div variants={fadeUp} className="mt-10">
+        <motion.div variants={fadeUp} className="mt-8 sm:mt-10">
           <TestimonialCarousel testimonials={testimonials} loading={loadingTestimonials} />
         </motion.div>
       </motion.section>
 
       <motion.section
         id="contact"
-        className="mx-auto max-w-6xl px-5 py-16"
+        className="mx-auto max-w-6xl px-4 sm:px-5 py-12 sm:py-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={staggerContainer}
       >
-        <div className="grid gap-6 md:grid-cols-[1fr_1.4fr]">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-[1fr_1.4fr]">
           <motion.div variants={fadeUp}>
-            <GlassCard className="p-6 h-full">
+            <GlassCard className="p-4 sm:p-6 h-full">
               <SectionHeading
                 eyebrow="Get In Touch"
                 title="Ready To Start Your Project?"
                 subtitle="Share your goals and we will help turn your vision into growth-focused outcomes."
               />
-              <div className="mt-8 space-y-4">
+              <div className="mt-6 sm:mt-8 space-y-3 sm:space-y-4">
                 {[
                   { icon: Mail, label: "Email", value: "hello@devcraftstudio.com" },
                   { icon: Phone, label: "Call", value: "+233 24 123 4567" },
@@ -726,19 +853,19 @@ export function HomePage() {
                 ].map((contact, idx) => (
                   <motion.div
                     key={contact.label}
-                    className="flex items-center gap-4 text-slate-300 group cursor-pointer"
+                    className="flex items-center gap-3 sm:gap-4 text-text-secondary group cursor-pointer"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    whileHover={{ x: 5, color: "#2ed3ff" }}
+                    whileHover={{ x: 5, color: "var(--accent-cyan)" }}
                   >
-                    <div className="p-2 rounded-lg border border-white/10 bg-white/5 group-hover:border-cyan-300/30 transition-colors">
-                      <contact.icon className="h-5 w-5" />
+                    <div className="p-2 rounded-lg border border-border bg-bg-card group-hover:border-accent-cyan/30 transition-colors">
+                      <contact.icon className="h-4 sm:h-5 w-4 sm:w-5" />
                     </div>
                     <div>
-                      <p className="text-xs uppercase tracking-wider text-slate-400">{contact.label}</p>
-                      <p className="text-sm">{contact.value}</p>
+                      <p className="text-xs uppercase tracking-wider text-text-muted">{contact.label}</p>
+                      <p className="text-sm text-text-primary">{contact.value}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -747,9 +874,9 @@ export function HomePage() {
           </motion.div>
 
           <motion.div variants={fadeUp}>
-            <GlassCard className="p-6">
-              <form className="space-y-6">
-                <div className="grid gap-6 sm:grid-cols-2">
+            <GlassCard className="p-4 sm:p-6">
+              <form className="space-y-4 sm:space-y-6">
+                <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
                   {[
                     { id: "name", label: "Your Name", type: "text" },
                     { id: "email", label: "Your Email", type: "email" }
@@ -763,8 +890,8 @@ export function HomePage() {
                       <motion.label
                         className={`absolute left-4 transition-all duration-300 pointer-events-none ${
                           formFocused === field.id 
-                            ? "-top-2 text-xs text-cyan-300 bg-[#0b1028] px-1" 
-                            : "top-3.5 text-slate-400"
+                            ? "-top-2 text-xs text-accent-cyan bg-bg-base px-1" 
+                            : "top-3.5 text-text-muted"
                         }`}
                       >
                         {field.label}
@@ -772,7 +899,7 @@ export function HomePage() {
                       <input
                         id={field.id}
                         type={field.type}
-                        className="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white outline-none transition-all duration-300 focus:border-cyan-300 focus:bg-white/10 focus:shadow-[0_0_20px_rgba(46,211,255,0.15)]"
+                        className="w-full rounded-xl border border-border bg-bg-card px-4 py-3 text-text-primary outline-none transition-all duration-300 focus:border-accent-cyan focus:bg-bg-surface focus:shadow-[0_0_20px_rgba(46,211,255,0.15)]"
                         onFocus={() => setFormFocused(field.id)}
                         onBlur={(e) => !e.target.value && setFormFocused(null)}
                       />
@@ -787,15 +914,15 @@ export function HomePage() {
                   <motion.label
                     className={`absolute left-4 transition-all duration-300 pointer-events-none ${
                       formFocused === "message" 
-                        ? "-top-2 text-xs text-cyan-300 bg-[#0b1028] px-1" 
-                        : "top-3.5 text-slate-400"
+                        ? "-top-2 text-xs text-accent-cyan bg-bg-base px-1" 
+                        : "top-3.5 text-text-muted"
                     }`}
                   >
                     Tell us about your project
                   </motion.label>
                   <textarea
                     id="message"
-                    className="min-h-32 w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-white outline-none transition-all duration-300 focus:border-cyan-300 focus:bg-white/10 focus:shadow-[0_0_20px_rgba(46,211,255,0.15)] resize-none"
+                    className="min-h-28 sm:min-h-32 w-full rounded-xl border border-border bg-bg-card px-4 py-3 text-text-primary outline-none transition-all duration-300 focus:border-accent-cyan focus:bg-bg-surface focus:shadow-[0_0_20px_rgba(46,211,255,0.15)] resize-none"
                     onFocus={() => setFormFocused("message")}
                     onBlur={(e) => !e.target.value && setFormFocused(null)}
                   />
@@ -804,7 +931,7 @@ export function HomePage() {
                   whileHover={reduceMotion ? undefined : { scale: 1.02 }}
                   whileTap={reduceMotion ? undefined : { scale: 0.98 }}
                 >
-                  <NeonButton className="w-full">
+                  <NeonButton className="w-full text-sm sm:text-base py-3">
                     <motion.span 
                       className="inline-flex items-center gap-2"
                       animate={reduceMotion ? undefined : { x: [0, 5, 0] }}
@@ -824,12 +951,12 @@ export function HomePage() {
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="border-t border-white/10 px-5 py-10"
+        className="border-t border-border px-4 sm:px-5 py-8 sm:py-10"
       >
-        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-4 text-sm text-slate-400 md:flex-row md:items-center">
-          <p>© 2026 DevCraft Studio. All rights reserved.</p>
-          <p className="inline-flex items-center gap-2">
-            Designed with motion-forward UX <Sparkles className="h-4 w-4 text-cyan-300" />
+        <div className="mx-auto flex max-w-6xl flex-col justify-between gap-4 text-sm text-text-muted md:flex-row md:items-center">
+          <p className="text-text-secondary">© 2026 DevCraft Studio. All rights reserved.</p>
+          <p className="inline-flex items-center gap-2 text-text-secondary">
+            Designed with motion-forward UX <Sparkles className="h-4 w-4 text-accent-cyan" />
           </p>
         </div>
       </motion.footer>
@@ -837,7 +964,7 @@ export function HomePage() {
       <AnimatePresence>
         {selectedProject ? (
           <motion.div
-            className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-5 backdrop-blur"
+            className="fixed inset-0 z-[70] grid place-items-center bg-black/70 p-4 sm:p-5 backdrop-blur"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -849,31 +976,31 @@ export function HomePage() {
               exit={{ y: 20, opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.25 }}
               onClick={(event: MouseEvent<HTMLDivElement>) => event.stopPropagation()}
-              className="w-full max-w-2xl"
+              className="w-full max-w-2xl mx-4"
             >
               <GlassCard className="overflow-hidden">
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
-                  className="h-56 w-full object-cover md:h-72"
+                  className="h-48 sm:h-56 w-full object-cover md:h-72"
                 />
-                <div className="space-y-4 p-6">
+                <div className="space-y-3 sm:space-y-4 p-4 sm:p-6">
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.18em] text-cyan-200">
+                      <p className="text-xs uppercase tracking-[0.18em] text-accent-cyan">
                         {selectedProject.category}
                       </p>
-                      <h3 className="text-2xl font-semibold">{selectedProject.title}</h3>
+                      <h3 className="text-xl sm:text-2xl font-semibold text-text-primary">{selectedProject.title}</h3>
                     </div>
                     <button
                       type="button"
                       onClick={() => setSelectedProject(null)}
-                      className="rounded-full border border-white/20 p-2 text-slate-200 transition hover:border-cyan-300"
+                      className="rounded-full border border-border p-2 text-text-secondary transition hover:border-accent-cyan hover:text-accent-cyan"
                     >
                       <X className="h-4 w-4" />
                     </button>
                   </div>
-                  <p className="text-slate-300">{selectedProject.blurb}</p>
+                  <p className="text-text-secondary">{selectedProject.blurb}</p>
                 </div>
               </GlassCard>
             </motion.div>
