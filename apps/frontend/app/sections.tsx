@@ -149,10 +149,10 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      className="text-center"
+      className="text-center p-2"
     >
       <motion.p 
-        className="text-3xl md:text-4xl font-bold text-cyan-300"
+        className="text-2xl sm:text-3xl md:text-4xl font-bold text-[var(--accent-cyan)]"
         initial={reduceMotion ? undefined : { scale: 0.5 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}
@@ -160,7 +160,7 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
       >
         {value}
       </motion.p>
-      <p className="text-sm text-slate-400 mt-1">{label}</p>
+      <p className="text-xs sm:text-sm text-text-muted mt-1 leading-tight">{label}</p>
     </motion.div>
   );
 }
@@ -563,7 +563,7 @@ export function HomePage() {
             <ThemeToggle />
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="p-2 rounded-xl border border-border bg-bg-card/50 backdrop-blur-sm"
+              className="p-2.5 rounded-xl border-2 border-border bg-bg-card shadow-sm active:scale-95 transition-transform"
               aria-label="Open menu"
             >
               <Menu className="w-5 h-5 text-text-primary" />
@@ -626,7 +626,7 @@ export function HomePage() {
             </motion.div>
             <motion.div 
               variants={staggerContainer}
-              className="grid grid-cols-2 gap-3 sm:gap-4 pt-4 md:grid-cols-4"
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4"
             >
               {[
                 ["50+", "Projects Completed"],
@@ -637,8 +637,27 @@ export function HomePage() {
                 <AnimatedCounter key={label} value={value} label={label} />
               ))}
             </motion.div>
+            
+            {/* Mobile Hero Card */}
+            <motion.div 
+              variants={fadeUp}
+              className="block md:hidden mt-6"
+            >
+              <GlassCard className="p-4 bg-gradient-to-br from-[var(--accent-cyan)]/10 to-[var(--accent-pink)]/10 border-[var(--accent-cyan)]/30">
+                <p className="text-xs uppercase tracking-wider text-[var(--accent-cyan)] mb-2">Creative Excellence</p>
+                <h3 className="text-lg font-semibold text-text-primary">Digital Solutions That Drive Growth</h3>
+                <div className="mt-3 flex gap-2">
+                  {services.slice(0, 3).map((s) => (
+                    <span key={s.title} className="text-xs px-2 py-1 rounded-full bg-bg-card border border-border text-text-secondary">
+                      {s.title.split(" ")[0]}
+                    </span>
+                  ))}
+                </div>
+              </GlassCard>
+            </motion.div>
           </motion.div>
 
+          {/* Desktop Hero Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
