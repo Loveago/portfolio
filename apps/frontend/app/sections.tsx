@@ -141,7 +141,7 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
   
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
@@ -149,7 +149,7 @@ function AnimatedCounter({ value, label }: { value: string; label: string }) {
     >
       <motion.p 
         className="text-3xl md:text-4xl font-bold text-cyan-300"
-        initial={reduceMotion ? false : { scale: 0.5 }}
+        initial={reduceMotion ? undefined : { scale: 0.5 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}
         transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
@@ -259,9 +259,9 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={reduceMotion ? false : { opacity: 0, x: 100 }}
+            initial={reduceMotion ? undefined : { opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={reduceMotion ? false : { opacity: 0, x: -100 }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -100 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
             className="grid gap-4 md:grid-cols-3"
           >
@@ -273,7 +273,7 @@ function TestimonialCarousel({ testimonials, loading }: { testimonials: Testimon
               return (
                 <motion.div
                   key={item.id}
-                  initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+                  initial={reduceMotion ? undefined : { opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: offset * 0.1 }}
                 >
@@ -395,7 +395,7 @@ export function HomePage() {
   return (
     <motion.main
       className="relative isolate"
-      initial={reduceMotion ? false : { opacity: 0 }}
+      initial={reduceMotion ? undefined : { opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.35 }}
     >
