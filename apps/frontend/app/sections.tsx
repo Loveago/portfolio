@@ -92,13 +92,20 @@ const projects: ProjectItem[] = [
 const navItems = ["home", "services", "portfolio", "testimonials", "contact"];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 }
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" }
+  }
 };
 
 const fadeIn = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1 }
+  visible: { 
+    opacity: 1,
+    transition: { duration: 0.4 }
+  }
 };
 
 const staggerContainer = {
@@ -106,8 +113,8 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.1
+      staggerChildren: 0.08,
+      delayChildren: 0.05
     }
   }
 };
@@ -511,49 +518,72 @@ export function HomePage() {
       <section id="home" className="pt-20 pb-12 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           
-          {/* Mobile Hero - Clean & Simple */}
+          {/* Mobile Hero - Clean & Simple with Animations */}
           <div className="md:hidden">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
               className="text-center"
             >
-              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-4">
+              <motion.span 
+                variants={fadeUp}
+                className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-4"
+              >
                 Welcome
-              </span>
-              <h1 className="text-3xl font-bold text-text-primary leading-tight mb-4">
+              </motion.span>
+              <motion.h1 
+                variants={fadeUp}
+                className="text-3xl font-bold text-text-primary leading-tight mb-4"
+              >
                 We Build.<br/>
                 We Market.<br/>
                 <span className="text-[var(--accent-cyan)]">We Deliver.</span>
-              </h1>
-              <p className="text-text-secondary text-base mb-6 max-w-xs mx-auto">
+              </motion.h1>
+              <motion.p 
+                variants={fadeUp}
+                className="text-text-secondary text-base mb-6 max-w-xs mx-auto"
+              >
                 Creative digital studio helping businesses grow.
-              </p>
-              <div className="flex flex-col gap-3 mb-8">
+              </motion.p>
+              <motion.div 
+                variants={fadeUp}
+                className="flex flex-col gap-3 mb-8"
+              >
                 <a href="#portfolio">
                   <NeonButton className="w-full">View Our Work</NeonButton>
                 </a>
                 <a href="#services">
                   <NeonButton variant="ghost" className="w-full">Our Services</NeonButton>
                 </a>
-              </div>
+              </motion.div>
             </motion.div>
 
-            {/* Mobile Stats - Horizontal Scroll */}
-            <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide">
+            {/* Mobile Stats - Horizontal Scroll with Animations */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-hide"
+            >
               {[
                 ["50+", "Projects"],
                 ["30+", "Clients"],
                 ["3", "Services"],
                 ["100%", "Commit"]
-              ].map(([value, label]) => (
-                <div key={label} className="flex-shrink-0 bg-bg-card border border-border rounded-xl p-3 min-w-[80px] text-center">
+              ].map(([value, label], idx) => (
+                <motion.div 
+                  key={label} 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 + idx * 0.1 }}
+                  className="flex-shrink-0 bg-bg-card border border-border rounded-xl p-3 min-w-[80px] text-center hover:border-[var(--accent-cyan)]/50 transition-colors"
+                >
                   <p className="text-xl font-bold text-[var(--accent-cyan)]">{value}</p>
                   <p className="text-xs text-text-muted">{label}</p>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           {/* Desktop Hero */}
@@ -613,20 +643,34 @@ export function HomePage() {
             </p>
           </div>
 
-          {/* Mobile: Vertical Cards */}
-          <div className="md:hidden space-y-3">
+          {/* Mobile: Vertical Cards with Animations */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={staggerContainer}
+            className="md:hidden space-y-3"
+          >
             {services.map((service) => (
-              <div key={service.title} className="bg-bg-card border border-border rounded-xl p-4 flex items-start gap-4">
-                <div className="p-2 rounded-lg bg-[var(--accent-cyan)]/10">
+              <motion.div 
+                key={service.title} 
+                variants={fadeUp}
+                className="bg-bg-card border border-border rounded-xl p-4 flex items-start gap-4 hover:border-[var(--accent-cyan)]/30 transition-colors"
+              >
+                <motion.div 
+                  className="p-2 rounded-lg bg-[var(--accent-cyan)]/10"
+                  whileHover={{ scale: 1.1 }}
+                  transition={{ type: "spring", stiffness: 400 }}
+                >
                   <service.icon className="h-6 w-6 text-[var(--accent-cyan)]" />
-                </div>
+                </motion.div>
                 <div>
                   <h3 className="font-semibold text-text-primary mb-1">{service.title}</h3>
                   <p className="text-sm text-text-secondary leading-relaxed">{service.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Desktop: Grid */}
           <div className="hidden md:grid md:grid-cols-3 gap-6">
@@ -653,29 +697,38 @@ export function HomePage() {
             </div>
           </div>
 
-          {/* Mobile: 2 Columns, Simpler */}
-          <div className="md:hidden grid grid-cols-2 gap-3">
+          {/* Mobile: 2 Columns with Animations */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={staggerContainer}
+            className="md:hidden grid grid-cols-2 gap-3"
+          >
             {projects.map((project) => (
-              <button
+              <motion.button
                 key={project.id}
+                variants={fadeUp}
                 onClick={() => setSelectedProject(project)}
-                className="text-left bg-bg-card border border-border rounded-xl overflow-hidden active:scale-95 transition-transform"
+                className="text-left bg-bg-card border border-border rounded-xl overflow-hidden active:scale-95 transition-all hover:border-[var(--accent-cyan)]/50 hover:shadow-lg"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img 
+                  <motion.img 
                     src={project.image} 
                     alt={project.title} 
                     className="w-full h-full object-cover"
                     loading="lazy"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
                   />
                 </div>
                 <div className="p-3">
                   <p className="text-[10px] uppercase tracking-wider text-[var(--accent-cyan)] mb-1">{project.category}</p>
                   <h3 className="text-sm font-semibold text-text-primary leading-tight">{project.title}</h3>
                 </div>
-              </button>
+              </motion.button>
             ))}
-          </div>
+          </motion.div>
 
           {/* Desktop: 4 Columns with hover effects */}
           <div className="hidden md:grid md:grid-cols-4 gap-6">
@@ -715,15 +768,29 @@ export function HomePage() {
             <h2 className="text-2xl md:text-4xl font-bold text-text-primary">What Our Clients Say</h2>
           </div>
 
-          {/* Mobile: Single Card */}
-          <div className="md:hidden">
+          {/* Mobile: Single Card with Animation */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="md:hidden"
+          >
             {loadingTestimonials ? (
               <div className="bg-bg-card border border-border rounded-xl p-4 animate-pulse h-32" />
             ) : testimonials.length > 0 ? (
-              <div className="bg-bg-card border border-border rounded-xl p-4">
+              <div className="bg-bg-card border border-border rounded-xl p-4 hover:border-[var(--accent-cyan)]/30 transition-colors">
                 <div className="flex items-center gap-1 mb-3">
                   {[1,2,3,4,5].map((star) => (
-                    <span key={star} className="text-[var(--accent-cyan)] text-sm">★</span>
+                    <motion.span 
+                      key={star} 
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: star * 0.1 }}
+                      className="text-[var(--accent-cyan)] text-sm"
+                    >
+                      ★
+                    </motion.span>
                   ))}
                 </div>
                 <p className="text-text-secondary text-sm mb-3 leading-relaxed">
@@ -732,7 +799,7 @@ export function HomePage() {
                 <p className="font-semibold text-text-primary text-sm">{testimonials[0].name}</p>
               </div>
             ) : null}
-          </div>
+          </motion.div>
 
           {/* Desktop: Carousel */}
           <div className="hidden md:block">
@@ -741,17 +808,29 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* CONTACT - Mobile Optimized */}
+      {/* CONTACT - Mobile Optimized with Animations */}
       <section id="contact" className="py-12 md:py-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center mb-8 md:mb-12">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-8 md:mb-12"
+          >
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase bg-[var(--accent-cyan)]/10 text-[var(--accent-cyan)] border border-[var(--accent-cyan)]/20 mb-2">
               Get In Touch
             </span>
             <h2 className="text-2xl md:text-4xl font-bold text-text-primary mb-2">Start Your Project</h2>
-          </div>
+          </motion.div>
 
-          <div className="max-w-md mx-auto md:max-w-none md:grid md:grid-cols-2 md:gap-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="max-w-md mx-auto md:max-w-none md:grid md:grid-cols-2 md:gap-8"
+          >
             {/* Mobile: Simple Form */}
             <div className="bg-bg-card border border-border rounded-2xl p-5 md:p-8">
               <form className="space-y-4">
@@ -775,7 +854,13 @@ export function HomePage() {
             </div>
 
             {/* Mobile: Contact Info Below */}
-            <div className="mt-6 md:mt-0 space-y-4 md:space-y-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="mt-6 md:mt-0 space-y-4 md:space-y-6"
+            >
               <p className="text-text-secondary text-sm md:text-base">
                 Ready to transform your digital presence? Let&apos;s discuss how we can help grow your business.
               </p>
@@ -784,17 +869,24 @@ export function HomePage() {
                   { icon: Mail, label: "hello@devcraftstudio.com" },
                   { icon: Phone, label: "+233 24 123 4567" },
                   { icon: MapPin, label: "Accra, Ghana" }
-                ].map((item) => (
-                  <div key={item.label} className="flex items-center gap-3 text-text-primary">
+                ].map((item, idx) => (
+                  <motion.div 
+                    key={item.label} 
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + idx * 0.1 }}
+                    className="flex items-center gap-3 text-text-primary"
+                  >
                     <div className="p-2 rounded-lg bg-[var(--accent-cyan)]/10">
                       <item.icon className="h-4 w-4 text-[var(--accent-cyan)]" />
                     </div>
                     <span className="text-sm">{item.label}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

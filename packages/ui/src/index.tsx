@@ -8,9 +8,9 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export function NeonButton({ children, variant = "solid", className = "", ...props }: ButtonProps) {
   const variants = {
     solid:
-      "bg-gradient-to-r from-[var(--accent-cyan)] via-[var(--accent-blue)] to-[var(--accent-purple)] text-white shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] hover:scale-105",
+      "bg-gradient-to-r from-[var(--accent-cyan)] via-[var(--accent-blue)] to-[var(--accent-purple)] text-white shadow-[0_0_30px_rgba(0,212,255,0.4)] hover:shadow-[0_0_50px_rgba(168,85,247,0.5)] hover:scale-105 active:scale-95",
     ghost:
-      "bg-bg-card/80 text-text-primary border-2 border-border hover:border-[var(--accent-pink)] hover:text-[var(--accent-pink)] hover:shadow-[0_0_20px_rgba(255,107,157,0.2)]"
+      "bg-bg-card/80 text-text-primary border-2 border-border hover:border-[var(--accent-pink)] hover:text-[var(--accent-pink)] hover:shadow-[0_0_20px_rgba(255,107,157,0.2)] hover:scale-105 active:scale-95"
   };
 
   const buttonVariant = variants[variant as keyof typeof variants];
