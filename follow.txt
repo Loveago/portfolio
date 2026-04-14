@@ -1,0 +1,133 @@
+You are a senior full-stack developer. Build a modern, highly animated business portfolio web application using the following requirements.
+
+## TECH STACK
+- Frontend: Next.js (latest, App Router)
+- Backend: Node.js with Express
+- Database: PostgreSQL
+- ORM: Prisma
+- Styling: Tailwind CSS
+- Animations: Framer Motion
+
+## PROJECT STRUCTURE
+Create everything inside ONE ROOT FOLDER with this structure:
+
+/apps/frontend (Next.js app)
+/apps/backend (Express server)
+/packages/ui (shared UI components)
+/db (database schema and config)
+
+Ensure everything runs together with a single command using concurrently.
+
+---
+
+## DESIGN REQUIREMENTS
+- Modern, clean, professional UI
+- Smooth animations and transitions across the entire site
+- Use Framer Motion for:
+  - Page transitions
+  - Scroll animations
+  - Hover effects
+- Use glassmorphism and soft shadows
+- Responsive on mobile and desktop
+- Use a dark theme with accent colors
+
+---
+
+## WEBSITE SECTIONS
+
+### 1. HERO SECTION
+- Bold headline
+- Subtext about business
+- Animated CTA button
+- Background animation (gradient or particles)
+
+---
+
+### 2. SERVICES SECTION
+Display 3 services:
+- Web & Software Development
+- Social Media Marketing
+- Graphics Design
+
+Each service should have:
+- Icon
+- Description
+- Hover animation
+
+---
+
+### 3. PORTFOLIO SECTION
+- Grid layout
+- Use placeholder images
+- Each project card should:
+  - Animate on hover
+  - Show title and category
+  - Open modal or expand on click
+
+---
+
+### 4. TESTIMONIALS SECTION
+- Fetch from backend API
+- Display in animated cards or carousel
+- Include:
+  - Name
+  - Comment
+  - Rating (optional)
+
+---
+
+### 5. CONTACT SECTION
+- Form with:
+  - Name
+  - Email
+  - Message
+- Stylish inputs with animations
+
+---
+
+## BACKEND REQUIREMENTS
+
+### Create Express API:
+- GET /testimonials → return all testimonials
+- POST /testimonials → add new testimonial
+
+### PostgreSQL + Prisma:
+Create a Testimonials model:
+- id
+- name
+- message
+- createdAt
+
+Seed database with sample testimonials
+
+---
+
+## FRONTEND DATA HANDLING
+- Fetch testimonials from backend
+- Use loading states and animations
+
+---
+
+## EXTRA FEATURES
+- Smooth scrolling navigation
+- Sticky navbar
+- Animated footer
+- Use reusable components
+- Clean code structure
+
+---
+
+## FINAL OUTPUT
+- Fully working full-stack project
+- Clear instructions to run:
+  - install dependencies
+  - setup database
+  - run frontend + backend together
+
+---
+
+IMPORTANT:
+- Focus heavily on UI/UX quality
+- Use animations throughout but keep it smooth and not laggy
+- Use placeholder images where needed
+- Make it feel like a premium agency website

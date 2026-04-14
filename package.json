@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-company-site",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "db"
+  ],
+  "scripts": {
+    "dev": "npm run prisma:generate --workspace frontend && npm run dev --workspace frontend",
+    "dev:full": "npm run prisma:generate --workspace db && concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace frontend\"",
+    "build": "npm run build --workspace frontend",
+    "db:migrate": "npm run prisma:migrate --workspace frontend",
+    "db:seed": "npm run prisma:seed --workspace frontend",
+    "prisma:generate": "npm run prisma:generate --workspace frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
